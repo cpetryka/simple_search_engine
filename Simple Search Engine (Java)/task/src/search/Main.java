@@ -11,6 +11,31 @@ public class Main {
     public static Map<String, List<Integer>> invertedIndex;
 
     /**
+     * Finds the filename from the command line arguments.
+     * If --data is not provided, it returns a default filename "names.txt".
+     *
+     * @param args command line arguments
+     * @return the filename to be used for data
+     */
+    public static String findFilename(String[] args) {
+        String filename = "";
+
+        for (int i = 0; i < args.length; i++) {
+            if ("--data".equals(args[i])) {
+                if (i + 1 < args.length) {
+                    filename = args[i + 1];
+                    i++;
+                } else {
+                    System.out.println("Error: --data requires a filename.");
+                    return "names.txt"; // Default filename if not provided
+                }
+            }
+        }
+
+        return filename;
+    }
+
+    /**
      * Initializes the search engine by reading data from a file and creating an inverted index.
      *
      * @param filename the name of the file containing the data
@@ -203,21 +228,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        String filename = "";
-
-        for (int i = 0; i < args.length; i++) {
-            if ("--data".equals(args[i])) {
-                if (i + 1 < args.length) {
-                    filename = args[i + 1];
-                    i++;
-                } else {
-                    System.out.println("Error: --data requires a filename.");
-                    return;
-                }
-            }
-        }
-
-        initialize(filename);
+        initialize(findFilename(args));
 
         while(menu()) {}
 
